@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Navigation -->
+        <nav class="admin-nav">
+            <h1>Admin Dashboard</h1>
+            <ul>
+                <li><a th:href="@{/admin/dashboard}" class="active">Dashboard</a></li>
+                <li><a th:href="@{/admin/users}">User Management</a></li>
+                <li><a th:href="@{/admin/planets}">Planet Management</a></li>
+                <li><a th:href="@{/admin/events}">Event Management</a></li>
+                <li><a th:href="@{/admin/logs}">System Logs</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Overview Cards -->
+            <div class="metric-cards">
+                <div class="metric-card">
+                    <h3>Total Users</h3>
+                    <p th:text="${metrics.totalUsers}">0</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Active Users</h3>
+                    <p th:text="${metrics.activeUsers}">0</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Total Planets</h3>
+                    <p th:text="${metrics.totalPlanets}">0</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h2>Recent Changes</h2>
+                <div class="activity-list">
+                    <div th:each="change : ${metrics.recentChanges}" class="activity-item">
+                        <span th:text="${change.changeType}" class="badge"></span>
+                        <span th:text="${change.planet.name}"></span>
+                        <span th:text="${#temporals.format(change.changedAt, 'dd-MM-yyyy HH:mm')}" class="timestamp"></span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

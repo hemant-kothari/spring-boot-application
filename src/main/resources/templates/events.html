@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Celestial Events</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .event-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .event-date {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .event-type {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .event-image {
+            max-width: 300px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .filter-section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upcoming Celestial Events</h1>
+        
+        <div class="filter-section">
+            <label>Filter by type: </label>
+            <select onchange="filterEvents(this.value)">
+                <option value="">All Events</option>
+                <option value="Eclipse">Eclipses</option>
+                <option value="Meteor Shower">Meteor Showers</option>
+                <option value="Conjunction">Conjunctions</option>
+            </select>
+        </div>
+        
+        <div class="events-list">
+            <div th:each="event : ${events}" class="event-card">
+                <div class="event-date" th:text="${#temporals.format(event.eventDate, 'MMMM dd, yyyy - HH:mm')}"></div>
+                <span class="event-type" th:text="${event.eventType}"></span>
+                <h3 th:text="${event.name}"></h3>
+                <p th:text="${event.description}"></p>
+                <img th:if="${event.imageUrl}" th:src="${event.imageUrl}" class="event-image" th:alt="${event.name}">
+                <p><strong>Location: </strong><span th:text="${event.visibilityLocation}"></span></p>
+                <p><strong>Duration: </strong><span th:text="${event.duration}"></span></p>
+            </div>
+        </div>
+        
+        <button onclick="window.location.href='/'" class="back-button">Back to Home</button>
+    </div>
+
+    <script>
+    function filterEvents(eventType) {
+        if (eventType) {
+            window.location.href = '/events?type=' + eventType;
+        } else {
+            window.location.href = '/events';
+        }
+    }
+    </script>
+</body>
+</html>

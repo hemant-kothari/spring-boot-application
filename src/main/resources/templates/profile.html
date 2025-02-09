@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>My Profile</h2>
+        <div th:if="${param.updated}" class="alert alert-success">
+            Profile updated successfully!
+        </div>
+        <form th:action="@{/profile/update}" method="post">
+            <div>
+                <label>First Name:</label>
+                <input type="text" name="firstName" th:value="${user.profile.firstName}"/>
+            </div>
+            <div>
+                <label>Last Name:</label>
+                <input type="text" name="lastName" th:value="${user.profile.lastName}"/>
+            </div>
+            <div>
+                <label>Favorite Planet:</label>
+                <input type="text" name="favoritePlanet" th:value="${user.profile.favoritePlanet}"/>
+            </div>
+            <div>
+                <label>Bio:</label>
+                <textarea name="bio" th:text="${user.profile.bio}"></textarea>
+            </div>
+            <button type="submit">Update Profile</button>
+        </form>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>

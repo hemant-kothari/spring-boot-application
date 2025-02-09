@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Planet Comparison</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .planet-selector {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        .planet-select-box {
+            text-align: center;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .comparison-table td {
+            padding: 12px;
+            text-align: center;
+        }
+        .comparison-table tr:first-child td {
+            padding: 20px;
+        }
+        .planet-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+        .feature-label {
+            font-weight: bold;
+            text-align: left;
+            padding-left: 20px;
+            width: 200px;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Compare Planets</h2>
+        
+        <div class="planet-selector">
+            <div class="planet-select-box">
+                <h3>First Planet</h3>
+                <select id="planet1" onchange="comparePlanets()">
+                    <option value="">Select a planet</option>
+                    <option value="Mercury">Mercury</option>
+                    <option value="Venus">Venus</option>
+                    <option value="Earth">Earth</option>
+                    <option value="Mars">Mars</option>
+                    <option value="Jupiter">Jupiter</option>
+                    <option value="Saturn">Saturn</option>
+                    <option value="Uranus">Uranus</option>
+                    <option value="Neptune">Neptune</option>
+                </select>
+            </div>
+
+            <div class="planet-select-box">
+                <h3>Second Planet</h3>
+                <select id="planet2" onchange="comparePlanets()">
+                    <option value="">Select a planet</option>
+                    <option value="Mercury">Mercury</option>
+                    <option value="Venus">Venus</option>
+                    <option value="Earth">Earth</option>
+                    <option value="Mars">Mars</option>
+                    <option value="Jupiter">Jupiter</option>
+                    <option value="Saturn">Saturn</option>
+                    <option value="Uranus">Uranus</option>
+                    <option value="Neptune">Neptune</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="comparisonResults"></div>
+        <button onclick="window.location.href='/'" class="back-button">Back to Solar System</button>
+    </div>
+
+    <script>
+        function comparePlanets() {
+            const planet1 = $('#planet1').val();
+            const planet2 = $('#planet2').val();
+
+            if (planet1 && planet2) {
+                $.get(`/api/compare?planet1=${planet1}&planet2=${planet2}`, function(data) {
+                    let comparisonHtml = `
+                        <table class="comparison-table">
+                            <tr>
+                                <td class="feature-label"></td>
+                                <td>
+                                    <img src="${data.planet1.imageUrl}" alt="${data.planet1.name}" class="planet-image">
+                                    <h3>${data.planet1.name}</h3>
+                                </td>
+                                <td>
+                                    <img src="${data.planet2.imageUrl}" alt="${data.planet2.name}" class="planet-image">
+                                    <h3>${data.planet2.name}</h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="feature-label">Distance from Sun</td>
+                                <td>${data.planet1.distanceFromSun.toLocaleString()} km</td>
+                                <td>${data.planet2.distanceFromSun.toLocaleString()} km</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-label">Diameter</td>
+                                <td>${data.planet1.diameter.toLocaleString()} km</td>
+                                <td>${data.planet2.diameter.toLocaleString()} km</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-label">Orbital Period</td>
+                                <td>${data.planet1.orbitalPeriod} days</td>
+                                <td>${data.planet2.orbitalPeriod} days</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-label">Number of Moons</td>
+                                <td>${data.planet1.moons}</td>
+                                <td>${data.planet2.moons}</td>
+                            </tr>
+                            <tr>
+                                <td class="feature-label">Gravity</td>
+                                <td>${data.planet1.gravity} m/s²</td>
+                                <td>${data.planet2.gravity} m/s²</td>
+                            </tr>
+                        </table>
+                    `;
+                    $('#comparisonResults').html(comparisonHtml);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Planet Management - Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Navigation (same as dashboard) -->
+        <nav class="admin-nav">
+            <!-- ... navigation content ... -->
+        </nav>
+
+        <main class="admin-main">
+            <h2>Planet Management</h2>
+            
+            <button onclick="showAddPlanetModal()" class="add-button">Add New Planet</button>
+
+            <table class="planet-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Distance from Sun</th>
+                        <th>Diameter</th>
+                        <th>Moons</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="planet : ${planets}">
+                        <td th:text="${planet.name}"></td>
+                        <td th:text="${planet.distanceFromSun}"></td>
+                        <td th:text="${planet.diameter}"></td>
+                        <td th:text="${planet.moons}"></td>
+                        <td>
+                            <button onclick="editPlanet(this)" 
+                                    th:data-planet-id="${planet.id}"
+                                    class="action-button">
+                                Edit
+                            </button>
+                            <button onclick="deletePlanet(this)"
+                                    th:data-planet-id="${planet.id}"
+                                    class="action-button delete">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Planet Edit Modal -->
+            <div id="planetModal" class="modal">
+                <!-- Modal content here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/admin-planets.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Management - Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Navigation (same as dashboard) -->
+        <nav class="admin-nav">
+            <!-- ... navigation content ... -->
+        </nav>
+
+        <main class="admin-main">
+            <h2>User Management</h2>
+            
+            <div class="user-filters">
+                <input type="text" id="userSearch" placeholder="Search users...">
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Roles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td>
+                            <span th:text="${user.enabled ? 'Active' : 'Inactive'}"
+                                  th:class="${user.enabled ? 'status-active' : 'status-inactive'}">
+                            </span>
+                        </td>
+                        <td>
+                            <span th:each="role : ${user.roles}" 
+                                  th:text="${role}"
+                                  class="role-badge">
+                            </span>
+                        </td>
+                        <td>
+                            <button th:onclick="'toggleUserStatus(' + ${user.id} + ')'"
+                                    th:text="${user.enabled ? 'Disable' : 'Enable'}"
+                                    class="action-button">
+                            </button>
+                            <button th:onclick="'resetPassword(' + ${user.id} + ')'"
+                                    class="action-button">
+                                Reset Password
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="/js/admin-users.js"></script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .banner-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .planet-image {
+            max-width: 300px;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .image-error {
+            display: none;
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="/images/solar system.jpeg" alt="Solar System" class="banner-image" 
+         onerror="this.onerror=null; this.src='/images/placeholder.jpeg'; document.getElementById('banner-error').style.display='block';">
+    <div id="banner-error" class="image-error">Unable to load solar system image</div>
+
+    <div class="buttons">
+        <button onclick="getPlanetDetails('Mercury')">Mercury</button>
+        <button onclick="getPlanetDetails('Venus')">Venus</button>
+        <button onclick="getPlanetDetails('Earth')">Earth</button>
+        <button onclick="getPlanetDetails('Mars')">Mars</button>
+        <button onclick="getPlanetDetails('Jupiter')">Jupiter</button>
+        <button onclick="getPlanetDetails('Saturn')">Saturn</button>
+        <button onclick="getPlanetDetails('Uranus')">Uranus</button>
+        <button onclick="getPlanetDetails('Neptune')">Neptune</button>
+    </div>
+
+    <div id="planetDetails" class="planet-details">
+    </div>
+
+
+    <div class="comparison-section">
+        <button onclick="window.location.href='/compare'" class="comparison-button">Compare Planets</button>
+    </div>
+
+</div>
+
+<script>
+function getPlanetDetails(planetName) {
+    $.ajax({
+        url: '/planet/' + encodeURIComponent(planetName),
+        method: 'GET',
+        success: function(data) {
+            let details = `
+                <h2>${data.name}</h2>
+                <img src="${data.imageUrl}" alt="${data.name}" class="planet-image" 
+                     onerror="this.onerror=null; this.src='/images/placeholder.jpeg'; this.nextElementSibling.style.display='block';">
+                <div class="image-error">Unable to load image for ${data.name}</div>
+                <p><strong>Description:</strong> ${data.description}</p>
+                <p><strong>Distance from Sun:</strong> ${data.distanceFromSun.toLocaleString()} km</p>
+                <p><strong>Diameter:</strong> ${data.diameter.toLocaleString()} km</p>
+                <p><strong>Orbital Period:</strong> ${data.orbitalPeriod.toLocaleString()} Earth days</p>
+                <p><strong>Number of Moons:</strong> ${data.moons}</p>
+                <p><strong>Gravity:</strong> ${data.gravity} m/s²</p>
+                <p><strong>Atmosphere Composition:</strong> ${data.atmosphereComposition}</p>
+            `;
+            $('#planetDetails').html(details);
+        },
+        error: function(xhr, status, error) {
+            $('#planetDetails').html('<p class="error">Error loading planet details. Please try again.</p>');
+            console.error('Error:', error);
+        }
+    });
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .banner-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .planet-image {
+            max-width: 300px;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .image-error {
+            display: none;
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img src="/images/solar system.jpeg" alt="Solar System" class="banner-image" 
+         onerror="this.onerror=null; this.src='/images/placeholder.jpeg'; document.getElementById('banner-error').style.display='block';">
+    <div id="banner-error" class="image-error">Unable to load solar system image</div>
+
+    <div class="buttons">
+        <button onclick="getPlanetDetails('Mercury')">Mercury</button>
+        <button onclick="getPlanetDetails('Venus')">Venus</button>
+        <button onclick="getPlanetDetails('Earth')">Earth</button>
+        <button onclick="getPlanetDetails('Mars')">Mars</button>
+        <button onclick="getPlanetDetails('Jupiter')">Jupiter</button>
+        <button onclick="getPlanetDetails('Saturn')">Saturn</button>
+        <button onclick="getPlanetDetails('Uranus')">Uranus</button>
+        <button onclick="getPlanetDetails('Neptune')">Neptune</button>
+    </div>
+
+    <div id="planetDetails" class="planet-details">
+    </div>
+
+
+    <div class="comparison-section">
+        <button onclick="window.location.href='/compare'" class="comparison-button">Compare Planets</button>
+    </div>
+
+</div>
+
+<script>
+function getPlanetDetails(planetName) {
+    $.ajax({
+        url: '/planet/' + encodeURIComponent(planetName),
+        method: 'GET',
+        success: function(data) {
+            let details = `
+                <h2>${data.name}</h2>
+                <img src="${data.imageUrl}" alt="${data.name}" class="planet-image" 
+                     onerror="this.onerror=null; this.src='/images/placeholder.jpeg'; this.nextElementSibling.style.display='block';">
+                <div class="image-error">Unable to load image for ${data.name}</div>
+                <p><strong>Description:</strong> ${data.description}</p>
+                <p><strong>Distance from Sun:</strong> ${data.distanceFromSun.toLocaleString()} km</p>
+                <p><strong>Diameter:</strong> ${data.diameter.toLocaleString()} km</p>
+                <p><strong>Orbital Period:</strong> ${data.orbitalPeriod.toLocaleString()} Earth days</p>
+                <p><strong>Number of Moons:</strong> ${data.moons}</p>
+                <p><strong>Gravity:</strong> ${data.gravity} m/s²</p>
+                <p><strong>Atmosphere Composition:</strong> ${data.atmosphereComposition}</p>
+            `;
+            $('#planetDetails').html(details);
+        },
+        error: function(xhr, status, error) {
+            $('#planetDetails').html('<p class="error">Error loading planet details. Please try again.</p>');
+            console.error('Error:', error);
+        }
+    });
+}
+</script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Solar System Explorer</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <img src="solar system.jpeg" alt="Solar System" class="banner-image">
+
+    <div class="buttons">
+        <button onclick="getPlanetDetails('Mercury')">Mercury</button>
+        <button onclick="getPlanetDetails('Venus')">Venus</button>
+        <button onclick="getPlanetDetails('Earth')">Earth</button>
+        <button onclick="getPlanetDetails('Mars')">Mars</button>
+        <button onclick="getPlanetDetails('Jupiter')">Jupiter</button>
+        <button onclick="getPlanetDetails('Saturn')">Saturn</button>
+        <button onclick="getPlanetDetails('Uranus')">Uranus</button>
+        <button onclick="getPlanetDetails('Neptune')">Neptune</button>
+    </div>
+
+    <div id="planetDetails" class="planet-details">
+    </div>
+</div>
+
+<script>
+function getPlanetDetails(planetName) {
+    $.ajax({
+        url: '/planet/' + encodeURIComponent(planetName),
+        method: 'GET',
+        success: function(data) {
+            let details = `
+                <h2>${data.name}</h2>
+                <img src="${data.imageUrl}" alt="${data.name}" class="planet-image">
+                <p><strong>Description:</strong> ${data.description}</p>
+                <p><strong>Distance from Sun:</strong> ${data.distanceFromSun} km</p>
+                <p><strong>Diameter:</strong> ${data.diameter} km</p>
+                <p><strong>Orbital Period:</strong> ${data.orbitalPeriod} Earth days</p>
+                <p><strong>Number of Moons:</strong> ${data.moons}</p>
+                <p><strong>Gravity:</strong> ${data.gravity} m/s²</p>
+                <p><strong>Atmosphere Composition:</strong> ${data.atmosphereComposition}</p>
+            `;
+            $('#planetDetails').html(details);
+        },
+        error: function(xhr, status, error) {
+            $('#planetDetails').html('<p class="error">Error loading planet details. Please try again.</p>');
+            console.error('Error:', error);
+        }
+    });
+}
+</script>
+</body>
+</html> -->
